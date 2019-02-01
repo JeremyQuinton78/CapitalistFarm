@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html>
 <head>
     <meta charset="utf-8" />
@@ -27,6 +26,7 @@
         var delay = 1000;
         var btnOn = false;
         var random;
+        var displayScore;
 
         function loop() {
                 
@@ -35,7 +35,6 @@
             var minutes = d.getMinutes();
             var seconds = d.getSeconds();
             var TimeStamp = d.getTime();
-            var displayScore;
 
             if (hours < 10) { hours = "0" + hours; }
             if (minutes < 10) { minutes = "0" + minutes; }
@@ -96,15 +95,13 @@
 
         function more() {
             score = score + (score / (100 / random));
-            var buttons = document.getElementById("buttons");
-            buttons.removeChild(buttons.childNodes[0]);
+            document.getElementById("buttons").removeChild(buttons.childNodes[0]);
             btnOn = false;
         }
 
         function faster() {
             delay = delay - 2 * random;
-            var buttons = document.getElementById("buttons");
-            buttons.removeChild(buttons.childNodes[0]);
+            document.getElementById("buttons").removeChild(buttons.childNodes[0]);
             btnOn = false;
         }
     </script>
