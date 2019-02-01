@@ -41,8 +41,10 @@
             if (seconds < 10) { seconds = "0" + seconds; }
             document.getElementById("now").innerHTML = hours + " : " + minutes + " : " + seconds;
 
-            if (delay <= 0) { delay = 1; }
-            profit = (TimeStamp - timeStart) / delay;
+            if (delay > 0) { profit = (TimeStamp - timeStart) / delay; }
+            if (delay == 0) { profit = TimeStamp - timeStart }
+            if (delay < 0) { profit = (TimeStamp - timeStart) * -delay; }
+           
             score = Math.round(score + profit);
 
             if (score <= 1000) { displayScore = score + " $"; }
@@ -57,6 +59,7 @@
 
             if (seconds == 0 && btnOn == false) {
                 var btn = document.createElement("button");
+                var MoreOrFaster = Math.floor(Math.random() * Math.floor(2)); 
 
                 if (minutes == 00 || minutes == 30) {
                     random = 50 + Math.floor(Math.random() * Math.floor(50));
@@ -73,9 +76,6 @@
                 else {
                     random = 1 + Math.floor(Math.random() * Math.floor(10));
                 }
-
-                if (delay > 0) { var MoreOrFaster = Math.floor(Math.random() * Math.floor(2)); }
-                else { var MoreOrFaster = 0; }
 
                 if (MoreOrFaster == 0) {
                     btn.appendChild(document.createTextNode("+" + random + "%"));
