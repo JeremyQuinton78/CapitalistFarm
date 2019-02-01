@@ -20,21 +20,26 @@
     <script>
 
         var d = new Date();
-        var timeStart = d.getTime();
-        var profit;
-        var score = 0;
-        var delay = 1000;
-        var btnOn = false;
-        var random;
-        var displayScore;
+        var timeStart = d.getTime(); // définition du temps de départ en timestamp.
 
+        var hours;
+        var minutes;
+        var seconds;
+        var TimeStamp; // Heure actuel en timestamp.
+        var profit; // écart entre maintenant et le temps de départ.
+        var delay = 1000; // Délai avant que le profit impact le score
+        var score = 0; 
+        var displayScore; // L'affichage du score.
+        var btnOn = false; // "True" si le bouton est présent
+        var bonus; // De combien sera la bonus.
+        
         function loop() {
                 
-            var d = new Date();
-            var hours = d.getHours();
-            var minutes = d.getMinutes();
-            var seconds = d.getSeconds();
-            var TimeStamp = d.getTime();
+            d = new Date();
+            hours = d.getHours();
+            minutes = d.getMinutes();
+            seconds = d.getSeconds();
+            TimeStamp = d.getTime();
 
             if (hours < 10) { hours = "0" + hours; }
             if (minutes < 10) { minutes = "0" + minutes; }
@@ -62,27 +67,27 @@
                 var MoreOrFaster = Math.floor(Math.random() * Math.floor(2)); 
 
                 if (minutes == 00 || minutes == 30) {
-                    random = 50 + Math.floor(Math.random() * Math.floor(50));
+                    bonus = 50 + Math.floor(Math.random() * Math.floor(50));
                 }
                 else if (minutes == 15 || minutes == 45) {
-                    random = 35 + Math.floor(Math.random() * Math.floor(15));
+                    bonus = 35 + Math.floor(Math.random() * Math.floor(15));
                 }
                 else if (minutes == 10 || minutes == 20 || minutes == 40 || minutes == 50) {
-                    random = 20 + Math.floor(Math.random() * Math.floor(15));
+                    bonus = 20 + Math.floor(Math.random() * Math.floor(15));
                 }
                 else if (minutes == 25 || minutes == 35 || minutes == 55) {
-                    random = 10 + Math.floor(Math.random() * Math.floor(10));
+                    bonus = 10 + Math.floor(Math.random() * Math.floor(10));
                 }
                 else {
-                    random = 1 + Math.floor(Math.random() * Math.floor(10));
+                    bonus = 1 + Math.floor(Math.random() * Math.floor(10));
                 }
 
                 if (MoreOrFaster == 0) {
-                    btn.appendChild(document.createTextNode("+" + random + "%"));
+                    btn.appendChild(document.createTextNode("+" + bonus + "%"));
                     btn.addEventListener("click", more);
                 }
                 else {
-                    btn.appendChild(document.createTextNode("+" + 2 * random + " speed pt"));
+                    btn.appendChild(document.createTextNode("+" + 2 * bonus + " speed pt"));
                     btn.addEventListener("click", faster);
                 }
 
@@ -94,16 +99,20 @@
         loop();
 
         function more() {
-            score = score + (score / (100 / random));
-            document.getElementById("buttons").removeChild(buttons.childNodes[0]);
-            btnOn = false;
+            if (seconds != 0) {
+                score = score + (score / (100 / bonus));
+                document.getElementById("buttons").removeChild(buttons.childNodes[0]);
+                btnOn = false;
+            }
         }
 
         function faster() {
-            delay = delay - 2 * random;
-            document.getElementById("buttons").removeChild(buttons.childNodes[0]);
-            btnOn = false;
+            if (seconds != 0) {
+                delay = delay - 2 * bonus;
+                document.getElementById("buttons").removeChild(buttons.childNodes[0]);
+                btnOn = false;
+            }
         }
     </script>
 </body>
-</html>
+
