@@ -4,9 +4,10 @@
     <meta charset="utf-8" />
     <title>CapitalistFarm</title>
     <style>
-        body{
-            background-color : #444444;
-            color : white;
+        body {
+            background-color: #444444;
+            color: white;
+            font-family: Consolas;
         }
     </style>
 </head>
@@ -32,6 +33,8 @@
         var displayScore; // L'affichage du score.
         var btnOn = false; // "True" si le bouton est présent
         var bonus; // De combien sera la bonus.
+        var cost; // Combien coûte le bonus
+        var displayCost; // affichage du cout d'un bonus
         
         function loop() {
                 
@@ -67,52 +70,74 @@
                 var MoreOrFaster = Math.floor(Math.random() * Math.floor(2)); 
 
                 if (minutes == 00 || minutes == 30) {
-                    bonus = 50 + Math.floor(Math.random() * Math.floor(50));
+                    calculBonus(50, 100);
                 }
                 else if (minutes == 15 || minutes == 45) {
-                    bonus = 35 + Math.floor(Math.random() * Math.floor(15));
+                    calculBonus(35, 50);
                 }
                 else if (minutes == 10 || minutes == 20 || minutes == 40 || minutes == 50) {
-                    bonus = 20 + Math.floor(Math.random() * Math.floor(15));
+                    calculBonus(20, 35);
                 }
                 else if (minutes == 25 || minutes == 35 || minutes == 55) {
-                    bonus = 10 + Math.floor(Math.random() * Math.floor(10));
+                    calculBonus(10, 20);
                 }
                 else {
-                    bonus = 1 + Math.floor(Math.random() * Math.floor(10));
+                    calculBonus(1, 10);
                 }
 
                 if (MoreOrFaster == 0) {
                     btn.appendChild(document.createTextNode("+" + bonus + "%"));
                     btn.addEventListener("click", more);
+
                 }
                 else {
-                    btn.appendChild(document.createTextNode("+" + 2 * bonus + " speed pt"));
+                    if (Math.round(cost) <= 1000) { displayCost = Math.round(cost) + " $"; }
+                    if (Math.round(cost) >= 1000) { displayCost = (Math.round(cost) / 1000) + " K $"; }
+                    if (Math.round(cost) >= 1000000) { displayCost = (Math.round(cost) / 1000000) + " M $"; }
+                    if (Math.round(cost) >= 1000000000) { displayCost = (Math.round(cost) / 1000000000) + " B $"; }
+                    if (Math.round(cost) >= 1000000000000) { displayCost = (Math.round(cost) / 1000000000000) + " T $"; }
+                    if (Math.round(cost) >= 1000000000000000) { displayCost = (Math.round(cost) / 1000000000000000) + " Q $"; }
+                    btn.appendChild(document.createTextNode("+" + 2 * bonus + " speed pt - " + displayCost));
                     btn.addEventListener("click", faster);
                 }
 
                 document.getElementById("buttons").appendChild(btn);
                 btnOn = true;
             }
+
+            if (seconds == 59 && btnOn == true) {
+                remove();
+            }
+
             setTimeout(loop, 100);
         }
         loop();
 
+        function calculBonus(min, max) {
+            bonus = min + Math.floor(Math.random() * Math.floor(max-min));
+            cost = (bonus * score / max) / 2;
+        }
+
         function more() {
             if (seconds != 0) {
                 score = score + (score / (100 / bonus));
-                document.getElementById("buttons").removeChild(buttons.childNodes[0]);
-                btnOn = false;
+                remove();
             }
         }
 
         function faster() {
             if (seconds != 0) {
                 delay = delay - 2 * bonus;
-                document.getElementById("buttons").removeChild(buttons.childNodes[0]);
-                btnOn = false;
+                score = score - cost;
+                remove();
             }
         }
+
+        function remove() {
+            document.getElementById("buttons").removeChild(buttons.childNodes[0]);
+            btnOn = false;
+        }
+
     </script>
 </body>
-
+</html>
