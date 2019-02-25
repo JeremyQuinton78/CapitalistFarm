@@ -9,50 +9,75 @@
             color: white;
             font-family: Consolas;
         }
+        th, td {
+            border-bottom: 1px solid white;
+        }
+        .left {
+            border-right: 1px solid white;
+            padding-right: 10%;
+        }
     </style>
 </head>
 <body>
 
-    <div id="now"></div>
-    <div id="score"></div>
-    <div id="speed"></div>
+    <table>
+        <tr>
+            <td class="left">Current time</td>
+            <td id="now"></td>
+        </tr>
+        <tr>
+            <td class="left">Time elapsed</td>
+            <td id="since"></td>
+        </tr>
+        <tr>
+            <td class="left">Score</td>
+            <td id="score"></td>
+        </tr>
+        <tr>
+            <td class="left">Speed</td>
+            <td id="speed"></td>
+        </tr>
+    </table>
+
     <div id="buttons"></div>
 
     <script>
 
         var d = new Date();
         var timeStart = d.getTime(); // définition du temps de départ en timestamp.
-
         var hours;
         var minutes;
         var seconds;
         var TimeStamp; // Heure actuel en timestamp.
+        var timeSince; // Temps écoulé depuis l'ouverture de la page.
         var profit; // écart entre maintenant et le temps de départ.
         var delay = 1000; // Délai avant que le profit impact le score
-        var score = 0; 
+        var score = 0;
         var displayScore; // L'affichage du score.
         var btnOn = false; // "True" si le bouton est présent
         var bonus; // De combien sera la bonus.
         var cost; // Combien coûte le bonus
         var displayCost; // affichage du cout d'un bonus
-        
+
         function loop() {
-                
+
             d = new Date();
             hours = d.getHours();
             minutes = d.getMinutes();
             seconds = d.getSeconds();
-            TimeStamp = d.getTime();
+            timeSince = new Date(d - timeStart);
 
             if (hours < 10) { hours = "0" + hours; }
             if (minutes < 10) { minutes = "0" + minutes; }
             if (seconds < 10) { seconds = "0" + seconds; }
             document.getElementById("now").innerHTML = hours + " : " + minutes + " : " + seconds;
+            
+            document.getElementById("since").innerHTML = (timeSince.getHours() + timeSince.getTimezoneOffset()/60)  + "h, " + timeSince.getMinutes() + "m, " + timeSince.getSeconds() + "s.";
 
-            if (delay > 0) { profit = (TimeStamp - timeStart) / delay; }
-            if (delay == 0) { profit = TimeStamp - timeStart }
-            if (delay < 0) { profit = (TimeStamp - timeStart) * -delay; }
-           
+            if (delay > 0) { profit = timeSince / delay; }
+            if (delay == 0) { profit = timeSince }
+            if (delay < 0) { profit = timeSince * -delay; }
+
             score = Math.round(score + profit);
 
             if (score <= 1000) { displayScore = score + " $"; }
@@ -60,14 +85,19 @@
             if (score >= 1000000) { displayScore = (score / 1000000) + " M $"; }
             if (score >= 1000000000) { displayScore = (score / 1000000000) + " B $"; }
             if (score >= 1000000000000) { displayScore = (score / 1000000000000) + " T $"; }
-            if (score >= 1000000000000000) { displayScore = (score / 1000000000000000) + " Q $"; }
+            if (score >= 1000000000000000) { displayScore = (score / 1000000000000000) + " Qa $"; }
+            if (score >= 1000000000000000000) { displayScore = (score / 1000000000000000000) + " Qi $"; }
+            if (score >= 1000000000000000000000) { displayScore = (score / 1000000000000000000000) + " Sx $"; }
+            if (score >= 1000000000000000000000000) { displayScore = (score / 1000000000000000000000000) + " Sp $"; }
+            if (score >= 1000000000000000000000000000) { displayScore = (score / 1000000000000000000000000000) + " Oc $"; }
+            if (score >= 1000000000000000000000000000000) { displayScore = (score / 1000000000000000000000000000000) + " No $"; }
 
             document.getElementById("score").innerHTML = displayScore;
-            document.getElementById("speed").innerHTML = "Speed : " + (1000 - delay);
+            document.getElementById("speed").innerHTML = 1000 - delay;
 
             if (seconds == 0 && btnOn == false) {
                 var btn = document.createElement("button");
-                var MoreOrFaster = Math.floor(Math.random() * Math.floor(2)); 
+                var MoreOrFaster = Math.floor(Math.random() * Math.floor(2));
 
                 if (minutes == 00 || minutes == 30) {
                     calculBonus(50, 100);
@@ -96,7 +126,12 @@
                     if (Math.round(cost) >= 1000000) { displayCost = (Math.round(cost) / 1000000) + " M $"; }
                     if (Math.round(cost) >= 1000000000) { displayCost = (Math.round(cost) / 1000000000) + " B $"; }
                     if (Math.round(cost) >= 1000000000000) { displayCost = (Math.round(cost) / 1000000000000) + " T $"; }
-                    if (Math.round(cost) >= 1000000000000000) { displayCost = (Math.round(cost) / 1000000000000000) + " Q $"; }
+                    if (Math.round(cost) >= 1000000000000000) { displayCost = (Math.round(cost) / 1000000000000000) + " Qa $"; }
+                    if (Math.round(cost) >= 1000000000000000000) { displayCost = (Math.round(cost) / 1000000000000000000) + " Qi $"; }
+                    if (Math.round(cost) >= 1000000000000000000000) { displayCost = (Math.round(cost) / 1000000000000000000000) + " Sx $"; }
+                    if (Math.round(cost) >= 1000000000000000000000000) { displayCost = (Math.round(cost) / 1000000000000000000000000) + " Sp $"; }
+                    if (Math.round(cost) >= 1000000000000000000000000000) { displayCost = (Math.round(cost) / 1000000000000000000000000000) + " Oc $"; }
+                    if (Math.round(cost) >= 1000000000000000000000000000000) { displayCost = (Math.round(cost) / 1000000000000000000000000000000) + " No $"; }
                     btn.appendChild(document.createTextNode("+" + 2 * bonus + " speed pt - " + displayCost));
                     btn.addEventListener("click", faster);
                 }
@@ -114,8 +149,8 @@
         loop();
 
         function calculBonus(min, max) {
-            bonus = min + Math.floor(Math.random() * Math.floor(max-min));
-            cost = (bonus * score / max) / 2;
+            bonus = min + Math.floor(Math.random() * Math.floor(max - min));
+            cost = Math.floor(Math.random() * Math.floor(score / 2));
         }
 
         function more() {
