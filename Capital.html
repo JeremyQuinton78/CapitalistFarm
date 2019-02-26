@@ -5,16 +5,17 @@
     <title>CapitalistFarm</title>
     <style>
         body {
-            background-color: #444444;
-            color: white;
+            background-color: black;
+            color: #00FF00;
             font-family: Consolas;
+            white-space: nowrap;
         }
-        th, td {
-            border-bottom: 1px solid white;
-        }
+        td {
+            border-bottom: 1px solid #00FF00;
+        }   
         .left {
-            border-right: 1px solid white;
-            padding-right: 10%;
+            padding-right : 10px;
+            border-right: 1px solid #00FF00;
         }
     </style>
 </head>
@@ -34,11 +35,11 @@
             <td id="score"></td>
         </tr>
         <tr>
-            <td class="left">Speed</td>
+            <td class="left">Speed </td>
             <td id="speed"></td>
         </tr>
     </table>
-
+    <br/>
     <div id="buttons"></div>
 
     <script>
@@ -52,8 +53,9 @@
         var timeSince; // Temps écoulé depuis l'ouverture de la page.
         var profit; // écart entre maintenant et le temps de départ.
         var delay = 1000; // Délai avant que le profit impact le score
-        var score = 0;
+        var score = 1;
         var displayScore; // L'affichage du score.
+        var displayNumber = ["", " K", " M", " B", " T", " Qa", " Qi", " Sx", " Sp", " Oc", " No"];
         var btnOn = false; // "True" si le bouton est présent
         var bonus; // De combien sera la bonus.
         var cost; // Combien coûte le bonus
@@ -72,7 +74,7 @@
             if (seconds < 10) { seconds = "0" + seconds; }
             document.getElementById("now").innerHTML = hours + " : " + minutes + " : " + seconds;
             
-            document.getElementById("since").innerHTML = (timeSince.getHours() + timeSince.getTimezoneOffset()/60)  + "h, " + timeSince.getMinutes() + "m, " + timeSince.getSeconds() + "s.";
+            document.getElementById("since").innerHTML = (timeSince.getHours() + timeSince.getTimezoneOffset()/60)  + "h, " + timeSince.getMinutes() + "m, " + timeSince.getSeconds() + "s";
 
             if (delay > 0) { profit = timeSince / delay; }
             if (delay == 0) { profit = timeSince }
@@ -80,17 +82,9 @@
 
             score = Math.round(score + profit);
 
-            if (score <= 1000) { displayScore = score + " $"; }
-            if (score >= 1000) { displayScore = (score / 1000) + " K $"; }
-            if (score >= 1000000) { displayScore = (score / 1000000) + " M $"; }
-            if (score >= 1000000000) { displayScore = (score / 1000000000) + " B $"; }
-            if (score >= 1000000000000) { displayScore = (score / 1000000000000) + " T $"; }
-            if (score >= 1000000000000000) { displayScore = (score / 1000000000000000) + " Qa $"; }
-            if (score >= 1000000000000000000) { displayScore = (score / 1000000000000000000) + " Qi $"; }
-            if (score >= 1000000000000000000000) { displayScore = (score / 1000000000000000000000) + " Sx $"; }
-            if (score >= 1000000000000000000000000) { displayScore = (score / 1000000000000000000000000) + " Sp $"; }
-            if (score >= 1000000000000000000000000000) { displayScore = (score / 1000000000000000000000000000) + " Oc $"; }
-            if (score >= 1000000000000000000000000000000) { displayScore = (score / 1000000000000000000000000000000) + " No $"; }
+            for (var i = 0; i <= 10; i++) {
+                if (score >= Math.pow(10, 3*i)) { displayScore = (score / Math.pow(10, 3*i)) + displayNumber[i] + " €"; }
+            }
 
             document.getElementById("score").innerHTML = displayScore;
             document.getElementById("speed").innerHTML = 1000 - delay;
@@ -121,17 +115,9 @@
 
                 }
                 else {
-                    if (Math.round(cost) <= 1000) { displayCost = Math.round(cost) + " $"; }
-                    if (Math.round(cost) >= 1000) { displayCost = (Math.round(cost) / 1000) + " K $"; }
-                    if (Math.round(cost) >= 1000000) { displayCost = (Math.round(cost) / 1000000) + " M $"; }
-                    if (Math.round(cost) >= 1000000000) { displayCost = (Math.round(cost) / 1000000000) + " B $"; }
-                    if (Math.round(cost) >= 1000000000000) { displayCost = (Math.round(cost) / 1000000000000) + " T $"; }
-                    if (Math.round(cost) >= 1000000000000000) { displayCost = (Math.round(cost) / 1000000000000000) + " Qa $"; }
-                    if (Math.round(cost) >= 1000000000000000000) { displayCost = (Math.round(cost) / 1000000000000000000) + " Qi $"; }
-                    if (Math.round(cost) >= 1000000000000000000000) { displayCost = (Math.round(cost) / 1000000000000000000000) + " Sx $"; }
-                    if (Math.round(cost) >= 1000000000000000000000000) { displayCost = (Math.round(cost) / 1000000000000000000000000) + " Sp $"; }
-                    if (Math.round(cost) >= 1000000000000000000000000000) { displayCost = (Math.round(cost) / 1000000000000000000000000000) + " Oc $"; }
-                    if (Math.round(cost) >= 1000000000000000000000000000000) { displayCost = (Math.round(cost) / 1000000000000000000000000000000) + " No $"; }
+                    for (var i = 0; i <= 10; i++) {
+                        if (Math.round(cost) >= Math.pow(10, 3*i)) { displayCost = (Math.round(cost) / Math.pow(10, 3*i)) + displayNumber[i] + " €"; }
+                    }
                     btn.appendChild(document.createTextNode("+" + 2 * bonus + " speed pt - " + displayCost));
                     btn.addEventListener("click", faster);
                 }
@@ -175,4 +161,3 @@
 
     </script>
 </body>
-</html>
